@@ -1,0 +1,11 @@
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\TrabalhoSD.deps.json
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\TrabalhoSD.runtimeconfig.json
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\TrabalhoSD.runtimeconfig.dev.json
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\TrabalhoSD.dll
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\TrabalhoSD.pdb
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\TrabalhoSD.csprojAssemblyReference.cache
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\TrabalhoSD.csproj.CoreCompileInputs.cache
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\TrabalhoSD.AssemblyInfoInputs.cache
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\TrabalhoSD.AssemblyInfo.cs
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\TrabalhoSD.dll
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\TrabalhoSD.pdb

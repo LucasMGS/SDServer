@@ -1,0 +1,14 @@
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.deps.json
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.runtimeconfig.json
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.runtimeconfig.dev.json
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.dll
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.pdb
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.csprojAssemblyReference.cache
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.csproj.CoreCompileInputs.cache
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.AssemblyInfoInputs.cache
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.AssemblyInfo.cs
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.dll
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.pdb
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.csproj.CopyComplete
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDClient.dll
+C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDClient.pdb
