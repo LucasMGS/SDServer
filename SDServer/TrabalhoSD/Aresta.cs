@@ -10,6 +10,7 @@ namespace TrabalhoSD
         public int Partida { get; set; }
         public int Destino { get; set; }
         public int Custo { get; set; }
+        public int QntdArestas { get; set; }
 
         public Aresta(int Partida, int Destino, int Custo)
         {

@@ -12,3 +12,16 @@ C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.
 C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.csproj.CopyComplete
 C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDClient.dll
 C:\Users\Lucas Moreira\source\repos\TrabalhoSD\TrabalhoSD\bin\Debug\netcoreapp2.1\SDClient.pdb
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.deps.json
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.runtimeconfig.json
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.runtimeconfig.dev.json
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.dll
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDServer.pdb
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDClient.dll
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\bin\Debug\netcoreapp2.1\SDClient.pdb
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.csprojAssemblyReference.cache
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.AssemblyInfoInputs.cache
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.AssemblyInfo.cs
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.csproj.CopyComplete
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.dll
+C:\Users\lucas\OneDrive\Documentos\GitHub\SDServer\SDServer\TrabalhoSD\obj\Debug\netcoreapp2.1\SDServer.pdb

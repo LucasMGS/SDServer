@@ -10,7 +10,7 @@
       <HintPath>bin\Debug\netcoreapp2.1\CompGrafica.dll</HintPath>
     </Reference>
     <Reference Include="SDClient">
-      <HintPath>..\..\CompGrafica\CompGrafica\bin\Debug\netcoreapp2.1\SDClient.dll</HintPath>
+      <HintPath>..\..\..\SDClient\SDClient\CompGrafica\bin\Debug\netcoreapp2.1\SDClient.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -3,78 +3,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using TrabalhoSD;
 
 namespace BellmanFordAlgorithm
 {
     class BellmanFord
     {
-        public struct Edge
+      
+        public static string Buscar(Grafo grafo, int noPartida, int noDestino)
         {
-            public int Source;
-            public int Destination;
-            public int Weight;
-        }
+            int qntdVertices = grafo.QntdVertices;
+            int qntdArestas = grafo.QntdArestas;
+            int[] distancia = new int[qntdVertices];
+            bool contemCicloNegativo = false;
 
-        public struct Graph
-        {
-            public int VerticesCount;
-            public int EdgesCount;
-            public Edge[] edge;
-        }
+            for (int i = 0; i < qntdVertices; i++)
+                distancia[i] = int.MaxValue;
 
-        public static Graph CreateGraph(int verticesCount, int edgesCount)
-        {
-            Graph graph = new Graph();
-            graph.VerticesCount = verticesCount;
-            graph.EdgesCount = edgesCount;
-            graph.edge = new Edge[graph.EdgesCount];
+            distancia[noPartida] = 0;
 
-            return graph;
-        }
-
-        private static void Print(int[] distance, int count)
-        {
-            Console.WriteLine("Vertex   Distance from source");
-
-            for (int i = 0; i < count; ++i)
-                Console.WriteLine("{0}\t {1}", i, distance[i]);
-        }
-
-        public static void BellmanFordAlgo(Graph graph, int source)
-        {
-            int verticesCount = graph.VerticesCount;
-            int edgesCount = graph.EdgesCount;
-            int[] distance = new int[verticesCount];
-
-            for (int i = 0; i < verticesCount; i++)
-                distance[i] = int.MaxValue;
-
-            distance[source] = 0;
-
-            for (int i = 1; i <= verticesCount - 1; ++i)
+            for (int i = 1; i <= qntdVertices - 1; ++i)
             {
-                for (int j = 0; j < edgesCount; ++j)
-                {
-                    int u = graph.edge[j].Source;
-                    int v = graph.edge[j].Destination;
-                    int weight = graph.edge[j].Weight;
+                for (int j = 0; j < qntdArestas; ++j)
+                {                   
+                    var arestasFiltradas = Grafo.Arestas.Where(x => x.Partida == j).ToList();
+                    foreach (var aresta in arestasFiltradas)
+                    {
+                        int u = aresta.Partida;
+                        int v = aresta.Destino; 
+                        int peso = aresta.Custo; 
 
-                    if (distance[u] != int.MaxValue && distance[u] + weight < distance[v])
-                        distance[v] = distance[u] + weight;
+                        if (distancia[u] != int.MaxValue && distancia[u] + peso < distancia[v])
+                            distancia[v] = distancia[u] + peso;
+                    }
                 }
             }
 
-            for (int i = 0; i < edgesCount; ++i)
+            for (int i = 0; i < qntdArestas; ++i)
             {
-                int u = graph.edge[i].Source;
-                int v = graph.edge[i].Destination;
-                int weight = graph.edge[i].Weight;
+                var arestasFiltradas = Grafo.Arestas.Where(x => x.Partida == i).ToList();
+                foreach (var aresta in arestasFiltradas)
+                {
+                    int u = aresta.Partida;
+                    int v = aresta.Destino;
+                    int peso = aresta.Custo;
 
-                if (distance[u] != int.MaxValue && distance[u] + weight < distance[v])
-                    Console.WriteLine("Graph contains negative weight cycle.");
+                    if (distancia[u] != int.MaxValue && distancia[u] + peso < distancia[v])
+                    {
+                        contemCicloNegativo = true;
+                    }
+                }
+
+                if (contemCicloNegativo)
+                {
+                    return "Este grafo possui contém ciclo negativo!";
+                }
             }
 
-            Print(distance, verticesCount);
+                return MenorCaminhoEspecifico(distancia, qntdVertices,noPartida,noDestino);
+                //MenorCaminho(distancia, qntdVertices, noPartida);
+        }
+
+        private static string MenorCaminhoEspecifico(int[] distancias,int qntdVertices,int noPartida,int noDestino)
+        {
+
+            for (int vertice = 0; vertice < qntdVertices; vertice++)
+            {
+                if (vertice == noDestino)
+                {
+                    if (distancias[vertice] != int.MaxValue)
+                    {
+                        return string.Format("A menor distância do vértice {0} para o vértice {1} é {2}",noPartida, noDestino, distancias[vertice]);
+                    }
+                    else
+                    {
+                       return string.Format("Não há uma conexão do vértice {0} com o vértice {1}", noPartida, noDestino);
+                    }
+                }
+                else
+                {
+                    return string.Format("Vértice {0} não encontrado", noPartida);
+                }
+            }
+            return "Busca Finalizada!";
+        }
+        private static void MenorCaminho(int[] distancia, int qntdVertices, int noPartida)
+        {
+            Console.WriteLine("Vertice   Distancia do vertice {0}",noPartida);
+
+            for (int i = 0; i < qntdVertices; ++i)
+            {
+                Console.WriteLine("{0}\t \t{1}", i, distancia[i]);
+            }
         }
     }
 }

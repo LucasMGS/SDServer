@@ -6,18 +6,20 @@ namespace TrabalhoSD
 {
     public class Grafo
     {
-        public int QntdVertices;
-        public int QntdArestas;
-        public Aresta[] Aresta;
+        public int QntdVertices { get; set; }
+        public int QntdArestas { get; set; }
+        private int[,] MatrizAdjacencia { get; set; }
+        public static List<Aresta> Arestas = new List<Aresta>();
 
-        public Grafo(int qntdVertices,int qntdArestas)
+        public Grafo(int qntdVertices)
         {
             QntdVertices = qntdVertices;
-            QntdArestas = qntdArestas;
-            Aresta = new Aresta[qntdArestas];
+            MatrizAdjacencia = CriarMatrizAdj(qntdVertices);
+            Arestas = CriarGrafo(MatrizAdjacencia);
+            QntdArestas = Arestas.Count;
         }
 
-        private static int[,] criarMatrizAdj(int tamanho)
+        private int[,] CriarMatrizAdj(int tamanho)
         {
             int[,] matrizAdj = new int[tamanho, tamanho];
             var random = new Random();
@@ -40,16 +42,36 @@ namespace TrabalhoSD
             return matrizAdj;
         }
 
-        public static Grafo Preencher(int qntdVertices, int qntdArestas)
+        private List<Aresta> CriarGrafo(int[,] matrizAdj)
         {
-            var grafo = new Grafo(qntdVertices, qntdArestas);
-            for (int i = 0; i < qntdVertices; i++)
+            var grafo = new List<Aresta>();
+            var random = new Random();
+            var tam = matrizAdj.GetLongLength(0);
+            for (int i = 0; i < tam; i++)
             {
-                grafo.Aresta[i].Partida = i;
-
+                for (int j = i + 1; j < tam; j++) // percorre o triangulo superior da matriz de adjacencia
+                {
+                    if (matrizAdj[i, j] == 1)
+                    {
+                        var rangeCusto = Int32.Parse(tam.ToString());
+                        var custo = random.Next(rangeCusto);
+                        if (matrizAdj[i, j] == 1)
+                        {
+                            grafo.Add(new Aresta(i, j, custo));
+                            grafo.Add(new Aresta(j, i, custo));
+                        }
+                    }
+                }
             }
             return grafo;
-            
         }
-    }
+
+        public void Mostrar()
+        {
+            foreach (var aresta in Arestas)
+            {
+                Console.WriteLine("Vértice {0} se conecta ao vértice {1} com custo {2}.", aresta.Partida, aresta.Destino, aresta.Custo);
+            }
+        }
+    }   
 }

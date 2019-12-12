@@ -8,6 +8,7 @@ using TrabalhoSD;
 using CompGrafica;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using BellmanFordAlgorithm;
 
 namespace SDServer
 {
@@ -18,74 +19,19 @@ namespace SDServer
         private const int Porta = 3333;
         private const int BUFFER_SIZE = 2048;
         private static byte[] buffer = new byte[BUFFER_SIZE];
+        private static Grafo grafo = new Grafo(3);
+
 
         static void Main()
         {
             Console.Title = "Server";
             ConfigSocket();
             Console.ReadLine();
-            // CloseAllSockets();
-            //var matrizAdj = criarMatrizAdj(10);
-            //var grafo = CriarGrafo(matrizAdj);
-            //var source = grafo.FirstOrDefault();
-
-            //imprimirGrafo(grafo);
+            //grafo.Mostrar();
+            //BellmanFord.Buscar(grafo, 28, 1);
         }
 
-        private static int[,] criarMatrizAdj(int tamanho)
-        {
-            int[,] matrizAdj = new int[tamanho, tamanho];
-            var random = new Random();
-
-            for (var i = 0; i < matrizAdj.GetLongLength(0); i++)
-            {
-                for (var j = 0; j < matrizAdj.GetLongLength(1); j++)
-                {
-                    if (i == j)
-                    {
-                        matrizAdj[i, j] = 0;
-                    }
-                    else
-                    {
-                        int randomNumber = random.Next(2);
-                        matrizAdj[i, j] = randomNumber;
-                    }
-                }
-            }
-            return matrizAdj;
-        }
-
-        private static List<Aresta> CriarGrafo(int[,] matrizAdj)
-        {
-            var grafo = new List<Aresta>();
-            var random = new Random();
-            var tam = matrizAdj.GetLongLength(0);
-            for (int i = 0; i < tam; i++)
-            {
-                for (int j = i + 1; j < tam; j++) // percorre o triangulo superior da matriz de adjacencia
-                {
-                    if (matrizAdj[i, j] == 1)
-                    {
-                        var rangeCusto = Int32.Parse(tam.ToString());
-                        var custo = random.Next(-rangeCusto, rangeCusto);
-                        if (matrizAdj[i, j] == 1)
-                        {
-                            grafo.Add(new Aresta(i, j, custo));
-                            grafo.Add(new Aresta(j, i, custo));
-                        }
-                    }
-                }
-            }
-            return grafo;
-        }
-
-        private static void imprimirGrafo(List<Aresta> Grafo)
-        {
-            foreach (var vertice in Grafo)
-            {
-                Console.WriteLine("Vértice {0} se conecta ao vértice {1} com custo {2}.", vertice.Partida, vertice.Destino, vertice.Custo);
-            }
-        }
+       
 
         private static void ConfigSocket()
         {
@@ -104,13 +50,13 @@ namespace SDServer
             {
                 socket = server.EndAccept(AR);
             }
-            catch (ObjectDisposedException) // I cannot seem to avoid this (on exit when properly closing sockets)
+            catch (ObjectDisposedException) 
             {
                 return;
             }
 
             clientSockets.Add(socket);
-            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.Broadcast, new AsyncCallback(ReceiveCallback), socket);
+            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
             Console.WriteLine("Client connectado, esperando requisições...");
             server.BeginAccept(new AsyncCallback(AceitarCallback), null);
         }
@@ -131,20 +77,31 @@ namespace SDServer
                 return;
             }
 
-            var dados = DeserializarDTO();
+            var dadosGrafo = DeserializarDTO();
+            int noPartida = dadosGrafo.NoPartida;
+            int noDestino = dadosGrafo.NoDestino;
 
-            if (dados.Operador == 1)
+            if (dadosGrafo.Operador == 1)
             {
-                Console.WriteLine("Requisição de busca por no!");
-                EnviarTexto(string.Format("Iniciando busca pelo no {0} partindo do no 0", dados.No));
+                Console.WriteLine("Requisição de busca por nó!");
+                EnviarTexto(string.Format("Iniciando busca pelo no {0} partindo do nó {1}", noDestino, noPartida));
+                if (grafo.QntdVertices > noPartida && noPartida > 0)
+                {
+                    var menorCaminho = BellmanFord.Buscar(grafo, noPartida, noDestino);
+                    EnviarTexto(string.Format(menorCaminho));
+                }
+                else
+                {
+                    EnviarTexto(string.Format("Não foi possível realizar a busca pois este nó de partida não existe no grafo!"));
+                }
             }
 
-            else if (dados.Operador == 2)
+            else if (dadosGrafo.Operador == 2)
             {
                 Console.WriteLine("Requisição para solicitar roteamento!");
             }
 
-            else if (dados.Operador == 3)
+            else if (dadosGrafo.Operador == 3)
             {
                 Console.WriteLine("Fechando conexão!");
                 FecharSockets();
@@ -153,7 +110,7 @@ namespace SDServer
             }
             else
             {
-                socketListening.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.Broadcast, ReceiveCallback, socketListening);
+                socketListening.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, socketListening);
             }
         }
 
@@ -163,12 +120,12 @@ namespace SDServer
             server.Send(bufferTexto);
         }
 
-        private static DtoInformacao DeserializarDTO()
+        private static DtoGrafo DeserializarDTO()
         {
             var formatter = new BinaryFormatter();
             var stream = new MemoryStream();
 
-            var dados = (DtoInformacao)formatter.Deserialize(stream);
+            var dados = (DtoGrafo)formatter.Deserialize(stream);
             return dados;
         }
 
