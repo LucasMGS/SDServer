@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 using TrabalhoSD;
 using CompGrafica;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace SDServer
 {
@@ -22,11 +24,11 @@ namespace SDServer
             Console.Title = "Server";
             ConfigSocket();
             Console.ReadLine();
-           // CloseAllSockets();
+            // CloseAllSockets();
             //var matrizAdj = criarMatrizAdj(10);
             //var grafo = CriarGrafo(matrizAdj);
             //var source = grafo.FirstOrDefault();
-            
+
             //imprimirGrafo(grafo);
         }
 
@@ -34,7 +36,7 @@ namespace SDServer
         {
             int[,] matrizAdj = new int[tamanho, tamanho];
             var random = new Random();
-            
+
             for (var i = 0; i < matrizAdj.GetLongLength(0); i++)
             {
                 for (var j = 0; j < matrizAdj.GetLongLength(1); j++)
@@ -60,9 +62,9 @@ namespace SDServer
             var tam = matrizAdj.GetLongLength(0);
             for (int i = 0; i < tam; i++)
             {
-                for (int j = i+1; j < tam; j++) // percorre o triangulo superior da matriz de adjacencia
+                for (int j = i + 1; j < tam; j++) // percorre o triangulo superior da matriz de adjacencia
                 {
-                    if (matrizAdj[i,j] == 1)
+                    if (matrizAdj[i, j] == 1)
                     {
                         var rangeCusto = Int32.Parse(tam.ToString());
                         var custo = random.Next(-rangeCusto, rangeCusto);
@@ -84,49 +86,14 @@ namespace SDServer
                 Console.WriteLine("Vértice {0} se conecta ao vértice {1} com custo {2}.", vertice.Partida, vertice.Destino, vertice.Custo);
             }
         }
-        
+
         private static void ConfigSocket()
         {
-            //var hostName = Dns.GetHostName();
-            //var listaIP = Dns.GetHostAddresses(hostName);
-            //var IP = (from ipAdress in listaIP
-            //          where ipAdress.AddressFamily == AddressFamily.InterNetwork
-            //          select ipAdress).FirstOrDefault();
-
-            //var ipEnd = new IPEndPoint(IP, Porta);
-
             Console.WriteLine("Configurando servidor!");
             server.Bind(new IPEndPoint(IPAddress.Any, Porta));
             server.Listen(5);
             server.BeginAccept(AceitarCallback, null);
             Console.WriteLine("Servidor configurado!");
-        }
-
-        private static void ConexaoLoop()
-        {
-            while (true)
-            {
-                try
-                {
-                    byte[] Buffer = new byte[server.ReceiveBufferSize];
-                    Socket socketServer = server.Accept();
-                    int bytesLidos = socketServer.Receive(Buffer);
-                    byte[] BytesRecebidos = new byte[bytesLidos];
-                    Array.Copy(Buffer, BytesRecebidos, bytesLidos);
-
-                    var NoRecebido = Encoding.UTF8.GetString(BytesRecebidos);
-
-                    DtoInformacao info = new DtoInformacao();
-                    if (info.Operador == 1)
-                    {
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
         }
 
         private static void AceitarCallback(IAsyncResult AR)
@@ -143,56 +110,69 @@ namespace SDServer
             }
 
             clientSockets.Add(socket);
-            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, new AsyncCallback(ReceiveCallback), socket);
+            socket.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.Broadcast, new AsyncCallback(ReceiveCallback), socket);
             Console.WriteLine("Client connectado, esperando requisições...");
             server.BeginAccept(new AsyncCallback(AceitarCallback), null);
         }
+
         private static void ReceiveCallback(IAsyncResult AR)
         {
-            Socket sAtual = (Socket)AR.AsyncState;
+            Socket socketListening = (Socket)AR.AsyncState;
             int bytesLidos;
             try
             {
-                bytesLidos = sAtual.EndReceive(AR);
+                bytesLidos = socketListening.EndReceive(AR);
             }
             catch (SocketException)
             {
-                Console.WriteLine("Client forcefully disconnected");
-                sAtual.Close();
-                clientSockets.Remove(sAtual);
+                Console.WriteLine("Client fechou conexão");
+                socketListening.Close();
+                clientSockets.Remove(socketListening);
                 return;
             }
 
-            byte[] bytesRecebidos = new byte[bytesLidos];
-            Array.Copy(buffer, bytesRecebidos, bytesLidos);
-            var mensagem = Encoding.ASCII.GetString(bytesRecebidos);
-            Console.WriteLine("Mensagem recebida: "+ mensagem);
-            
-            if(mensagem == "horas")
+            var dados = DeserializarDTO();
+
+            if (dados.Operador == 1)
             {
-                Console.WriteLine("Requisição de horas!");
-                byte[] dados = Encoding.ASCII.GetBytes(DateTime.Now.ToLongTimeString());
-                sAtual.Send(dados);
-                Console.WriteLine("Dados enviados ao client");
+                Console.WriteLine("Requisição de busca por no!");
+                EnviarTexto(string.Format("Iniciando busca pelo no {0} partindo do no 0", dados.No));
             }
-            else if (mensagem == "sair")
+
+            else if (dados.Operador == 2)
             {
-                sAtual.Shutdown(SocketShutdown.Both);
-                sAtual.Close();
-                clientSockets.Remove(sAtual);
-                Console.WriteLine("Client disconnected");
-                return;
+                Console.WriteLine("Requisição para solicitar roteamento!");
+            }
+
+            else if (dados.Operador == 3)
+            {
+                Console.WriteLine("Fechando conexão!");
+                FecharSockets();
+                Console.WriteLine("Conexão Finalizada!");
+                EnviarTexto("Conexão Finalizada!"); //avisa o client que foi encerrado a conexao
             }
             else
             {
-                Console.WriteLine("Mensagem inválida");
-                byte[] data = Encoding.ASCII.GetBytes("Mensagem Inválida");
-                sAtual.Send(data);
-                Console.WriteLine("Aviso enviado");
+                socketListening.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.Broadcast, ReceiveCallback, socketListening);
             }
-            sAtual.BeginReceive(buffer, 0, BUFFER_SIZE, SocketFlags.None, ReceiveCallback, sAtual);
         }
-        private static void CloseAllSockets()
+
+        private static void EnviarTexto(string texto)
+        {
+            byte[] bufferTexto = Encoding.ASCII.GetBytes(texto);
+            server.Send(bufferTexto);
+        }
+
+        private static DtoInformacao DeserializarDTO()
+        {
+            var formatter = new BinaryFormatter();
+            var stream = new MemoryStream();
+
+            var dados = (DtoInformacao)formatter.Deserialize(stream);
+            return dados;
+        }
+
+        private static void FecharSockets()
         {
             foreach (Socket socket in clientSockets)
             {
